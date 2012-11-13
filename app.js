@@ -4,16 +4,18 @@
  */
 
 var express = require('express')
+  , partials = require('express-partials')
   , pjax = require('express-pjax')
   , routes = require('./routes')
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 // Configuration
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.use(partials());
   app.use(pjax());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -35,5 +37,7 @@ app.get('/', routes.index);
 app.get('/dinosaurs', routes.dinosaurs);
 app.get('/aliens', routes.aliens);
 
-app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+var port = 3000;
+app.listen(port, function() {
+  console.log("Express server listening on port %d in %s mode", port, app.settings.env);
+});
